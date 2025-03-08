@@ -1,23 +1,25 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet");
-const compression = require("compression");
-const winston = require("./src/config/logger");
+require("dotenv").config(); // Load environment variables from .env file
 
 const app = express();
-app.use(cors());
-app.use(helmet());
-app.use(compression());
-app.use(express.json());
+const port = process.env.PORT || 5000; // Use environment variable PORT or default to 5000
 
-const userRoutes = require("./src/routes/userRoutes");
+// Middleware
+app.use(cors()); // Enable CORS to allow cross-origin requests
+app.use(express.json()); // Parse incoming JSON requests
 
-const auditRoutes = require("./src/routes/auditRoutes");
+// ✅ Root route (for basic testing)
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from Blank API! 🚀 Your API is running!" });
+});
 
-app.use("/api/users", userRoutes);
+// ✅ Example API endpoint
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello, this is an API endpoint!" });
+});
 
-app.use("/api/audit", auditRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => winston.info(`✅ Server running on port ${PORT}`));
+// Start the server
+app.listen(port, () => {
+  console.log(`✅ Server is running on http://localhost:${port}`);
+});
