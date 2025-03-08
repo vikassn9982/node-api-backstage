@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: my-node-api
+  description: Node.js API running on Kubernetes with KEDA
+spec:
+  type: openapi
+  lifecycle: production
+  owner: user
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: drcs-node-testapi
+      version: 1.0.0
+    paths:
+      /users:
+        get:
+          summary: Get all users
+          responses:
+            '200':
+              description: Success
+      /upload:
+        post:
+          summary: Upload file to Azure
+          responses:
+            '201':
+              description: File uploaded
