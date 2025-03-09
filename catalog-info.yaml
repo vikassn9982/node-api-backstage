@@ -1,18 +1,18 @@
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: blank-api
-  description: "A simple Node.js API running on localhost:5000"
+  name: document-management-api
+  description: "Document Management API running on localhost:5000"
   annotations:
     backstage.io/techdocs-ref: url:https://github.com/vikassn9982/node-api-backstage/blob/master/README.md
 spec:
   type: openapi
   lifecycle: experimental
-  owner: user  # ✅ This field is REQUIRED
+  owner: user
   definition: |
     openapi: 3.0.0
     info:
-      title: Blank API
+      title: Document Management API
       version: 1.0.0
     paths:
       /:
@@ -41,3 +41,61 @@ spec:
                     properties:
                       message:
                         type: string
+      /api/documents:
+        post:
+          summary: Upload a document
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    file:
+                      type: string
+                      format: binary
+                    metadata:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        container:
+                          type: string
+                          enum: [approved, issued, preliminary]
+          responses:
+            '201':
+              description: Document uploaded successfully
+            '500':
+              description: Error uploading document
+      /api/documents/{id}:
+        get:
+          summary: Get a document
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            '200':
+              description: Document retrieved successfully
+            '404':
+              description: Document not found
+            '500':
+              description: Error retrieving document
+        delete:
+          summary: Delete a document
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            '200':
+              description: Document deleted successfully
+            '404':
+              description: Document not found
+            '500':
+              description: Error deleting document
